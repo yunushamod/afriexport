@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %} 
+{% block content %}
+<h1>Welcome to AfriExport, {{request.user.first_name|default:request.user.username}}</h1>
+<p>Your account has been created successfully. Now you can <a href="{% url 'login' %}">log in</a>.</p>
+{% endblock %}

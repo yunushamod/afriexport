@@ -8,16 +8,16 @@ class UserRegistrationForm(forms.ModelForm):
         ('BY', 'Buyer'),
         ('SL', "Seller"), ('FR', 'Freight Forwarder')
     )
+    company_name = forms.CharField(max_length=250, required=True)
     password = forms.CharField(label = 'Password',widget=forms.PasswordInput, required=True)
     confirm_password = forms.CharField(label='Confirm Password', widget=forms.PasswordInput, required=True)
     phone = forms.CharField(label='Phone', max_length=11, required=True)
-    address = forms.CharField(max_length=350, required=True)
     business_type = forms.ChoiceField(choices = BUSINESS_TYPES, label='Business Type')
+    address = forms.CharField(max_length=350, required=True)
     photo = forms.ImageField(required=False)
-    company_name = forms.CharField(max_length=250, required=True)
     class Meta:
         model = User
-        fields = ['username', 'first_name','email', 'last_name']
+        fields = ['first_name', 'last_name', 'username', 'email',]
     
     def clean_confirm_password(self):
         cd = self.cleaned_data

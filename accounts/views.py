@@ -5,10 +5,6 @@ from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
 # Create your views here.
 
-@login_required
-def dashboard(request: HttpRequest) -> HttpResponse:
-    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
-
 def register(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         user_form = UserRegistrationForm(data = request.POST, files=request.FILES)

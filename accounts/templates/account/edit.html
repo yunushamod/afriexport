@@ -9,7 +9,14 @@
             {{profile_form.as_p}}
             {% csrf_token %}
             <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-outline-primary">Edit Profile</button>
+                <div  class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-outline-primary">Edit Profile</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url 'password_change' %}" class="btn btn-outline-danger">Change Password</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

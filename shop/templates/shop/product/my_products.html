@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{% if category %}{{category.name}}{% else %}Products{% endif %}
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <h1 class="display-4 mt-4 mb-4">Categories</h1>
+        <nav class="nav flex-column nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {% if not category %}active{% endif %}" href='{% url "shop:my_products" %}' aria-current="page">All</a>
+            </li>
+            {% for c in categories %}
+            <li class="nav-item">
+                <a class="nav-link {% if category.slug == c.slug %}active{% endif %}" href='{% url "shop:my_products_by_category"  c.slug %}' aria-current="page">{{c.name}}</a>
+            </li>
+            {% endfor %}
+        </nav>
+    </div>
+    <div class="col-md-7 ms-2">
+        <div class="row">
+            <div class="col-9">
+                <h1 class="display-4 mt-4 mb-4">
+                    {% if category %}{{category.name}}{% else %}Products{% endif %}
+                </h1>
+            </div>
+            <div class="col-3">
+                <a class="btn btn-outline-primary mt-5" href="{% url 'shop:create_product' %}">Create Product</a>
+            </div>
+        </div>
+        <div class="row">
+            {% for product in products %}
+            <div class="col">
+                <div class="card shadow m-1" style="width: 18rem;">
+                    <a href="{{product.get_absolute_url}}">
+                        <!-- style="display: none;" onload="drawCanvas(this)" -->
+                        <!-- <canvas id="canvas_img_{{forloop.counter}}" class="card-img-top"></canvas> -->
+                        <img id="img_{{forloop.counter}}" class="img-thumbnail img"
+                        src='{% if product.image %}{{product.image.url}}{% else %}{% static "img/no_image.png" %}{% endif %}'>
+                    </a>
+                    <p class="card-title m-1 fs-5 fw-semibold">{{product.name}}</p>
+                    <p class="card-subtitle m-1 fs-6 text-success fst-italic fw-light">₦{{product.price}}</p>
+                    <div class="card-body">
+                        <p class="card-text">{{product.description|truncatewords:30}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,3 +8,5 @@ formTags.forEach((form) => {
 });
 let selectLists = document.querySelectorAll('select');
 selectLists.forEach((selectList) => selectList.classList.add('form-select'))
+let textareas = document.querySelectorAll('textarea');
+textareas.forEach((textarea) => textarea.classList.add('form-control'));

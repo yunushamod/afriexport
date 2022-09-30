@@ -1,12 +1,6 @@
-from email.policy import default
-from io import BytesIO
-import sys
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-from django_resized import ResizedImageField
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from PIL import Image
 # Create your models here.
 
 
@@ -26,15 +20,14 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name = 'products', on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = 'products', on_delete=models.CASCADE)
-    slug = models.SlugField(max_length=200)
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="products/%Y/%m/%d", blank=True)
+    category = models.ForeignKey(Category, related_name = 'products', on_delete=models.SET_NULL, null=True)
+    slug = models.SlugField(max_length=200)
     description = models.TextField(blank=True)
-    #price = models.DecimalField(max_digits = 10, decimal_places = 2)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits = 10, decimal_places = 2)
     quantity = models.IntegerField(default = 0)
+    image = models.ImageField(upload_to="products/%Y/%m/%d", blank=True)
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

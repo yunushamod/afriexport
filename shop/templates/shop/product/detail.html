@@ -12,6 +12,7 @@
             Category: <a href="{{product.category.get_absolute_url}}">{{product.category.name}}</a>
         </h2>
         <p class="h4 text-success">Price: ₦{{product.price}}</p>
+        {% if product.user != request.user %}
         <form action="{% url 'cart:cart_add' product.id %}" method="post">
             <div style="width: 60%;" class="mt-4 mb-4">
                 {{cart_product_form}}
@@ -19,6 +20,7 @@
             </div>
             <button type="submit" class="btn btn-outline-primary mt-2 mb-2">Add to cart</button>
         </form>
+        {% endif %}
         <p>{{product.description|linebreaks}}</p>
     </div>
 </div>

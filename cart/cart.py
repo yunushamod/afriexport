@@ -20,11 +20,11 @@ class Cart:
         """
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[product.id] = {'quantity': 0, 'price': str(product.price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
         if override_quantity:
-            self.cart[product.id]['quantity'] = quantity
+            self.cart[product_id]['quantity'] = quantity
         else:
-            self.cart[product.id]['quantity']+= quantity
+            self.cart[product_id]['quantity']+= quantity
         self.save()
     def save(self):
         """
@@ -48,11 +48,16 @@ class Cart:
         products = Product.objects.filter(id__in=product_ids)
         print(products.values())
         cart = self.cart.copy()
-        for product in products.values():
-            cart[str(product.id)]['product'] = product
+        for product in products:
+            cart[str(product.id)]['name'] = product.name
+            if(product.image):
+                cart[str(product.id)]['image'] = product.image.url
+            cart[str(product.id)]['url'] = product.get_absolute_url()
+            cart[str(product.id)]['price'] = str(product.price)
+            cart[str(product.id)]['id'] = product.id
         for item in cart.values():
-            item['price'] = float(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
+            item['price'] = str(item['price'])
+            item['total_price'] = str(Decimal(item['price']) * item['quantity'])
             yield item
     def __len__(self):
         """Count all items in the cart"""
@@ -61,7 +66,7 @@ class Cart:
         """
         Gets the total price of all the items in the cart
         """
-        return sum(float(item['price']) * item['quantity'] for item in self.cart.values())
+        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
     
     def clear(self): 
         del self.session[settings.CART_SESSION_ID]

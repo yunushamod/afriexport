@@ -2,51 +2,54 @@
 {% load static %}
 {% block title %}Cart{% endblock %}
 {% block content %}
-<h1 class="display-4">Your shopping cart</h1>
-<table class="table table-borderless">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Remove</th>
-            <th>Unit price</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in cart %}
-        {% with product=item.product %}
-        <tr>
-            <td>
-                <a href="{{product.get_absolute_url}}">
-                    <img src='{% if product.image %}{{product.image.url}}{% else %}}{% static "img/no_image.png" %}{% endif %}'>
-                </a>
-            </td>
-            <td>
-                {{product.name}}
-            </td>
-            <td>{{item.quantity}}</td>
-            <td>
-                <form action='{% url "cart:cart_remove" product.id %}' method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-warning">Remove</button>
-                </form>
-            </td>
-            <td class="text-success">{{product.price}}</td>
-            <td class="text-success">{{item.total_price}}</td>
-        </tr> 
-        {% endwith %}
-        {% endfor %}
-        <tr>
-            <td>Total</td>
-            <td colspan="4"></td>
-            <td class="text-success">{{cart.get_total_price}}</td>
-        </tr>
-    </tbody>
-</table>
+<h1 class="display-4 mt-4 mb-3">Your shopping cart</h1>
+<div class="table-responsive">
+    <table class="table table-borderless table-sm table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Remove</th>
+                <th>Unit price</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            {% with product=item.product %}
+            <tr>
+                <td>
+                    <a href="{{item.url}}">
+                        <img src='{% if item.image %}{{item.image}}{% else %}{% static "img/no_image.png" %}{% endif %}' class="img-thumbnail"
+                        style="width: 40px;height:40px;">
+                    </a>
+                </td>
+                <td>
+                    {{item.name}}
+                </td>
+                <td>{{item.quantity}}</td>
+                <td>
+                    <form action='{% url "cart:cart_remove" item.id %}' method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-warning btn-sm">Remove</button>
+                    </form>
+                </td>
+                <td class="text-success">{{item.price}}</td>
+                <td class="text-success">{{item.total_price}}</td>
+            </tr> 
+            {% endwith %}
+            {% endfor %}
+            <tr>
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td class="text-success">{{cart.get_total_price}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 <p class="text-end">
-    <a href='{% url "shop:product_list" %}' class="btn btn-outl">Continue shopping</a>
+    <a href='{% url "shop:product_list" %}' class="btn btn-outline">Continue shopping</a>
     <a href="#" class="btn btn-outline-primary">Checkout</a>
 </p>
 {% endblock %} 

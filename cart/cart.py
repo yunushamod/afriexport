@@ -46,7 +46,6 @@ class Cart:
         """
         product_ids = self.cart.keys()
         products = Product.objects.filter(id__in=product_ids)
-        print(products.values())
         cart = self.cart.copy()
         for product in products:
             cart[str(product.id)]['name'] = product.name

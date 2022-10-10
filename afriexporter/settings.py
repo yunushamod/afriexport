@@ -23,9 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&ara=p8_n%jz-xlvbbf8_iz8i#52@vsq9c%d%&e!vv97t_vqpd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['portal.afriexporter.com']
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -76,12 +81,26 @@ WSGI_APPLICATION = 'afriexporter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'NAME': 'afriexpo_portal',
+            'ENGINE': 'mysql.connector.django',
+            'USER': 'afriexpo_portal_admin',
+            'PASSWORD': '11Cre$cent1290',
+            'OPTIONS': {
+                'autocommit': True,
+            },
+        }
+    }
 
 
 # Password validation
@@ -138,8 +157,16 @@ STATIC_ROOT = BASE_DIR / 'static'
 # DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': ".jpg"}
 # DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'portal.afriexporter.com'
+    EMAIL_USE_TLS = False
+    EMAIL_PORT = 2096
+    EMAIL_HOST_USER = 'admin@portal.afriexporter.com'
+    EMAIL_HOST_PASSWORD = '11Cre$cent1290'
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

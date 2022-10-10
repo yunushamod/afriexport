@@ -36,13 +36,13 @@
                     <a href="{{product.get_absolute_url}}">
                         <!-- style="display: none;" onload="drawCanvas(this)" -->
                         <!-- <canvas id="canvas_img_{{forloop.counter}}" class="card-img-top"></canvas> -->
-                        <img id="img_{{forloop.counter}}" class="img-thumbnail img"
+                        <img id="img_{{forloop.counter}}" class="img-thumbnail" style="width: 100%;"
                         src='{% if product.image %}{{product.image.url}}{% else %}{% static "img/no_image.png" %}{% endif %}'>
                     </a>
                     <p class="card-title m-1 fs-5 fw-semibold">{{product.name}}</p>
                     <p class="card-subtitle m-1 fs-6 text-success fst-italic fw-light">₦{{product.price}}</p>
                     <div class="card-body">
-                        <p class="card-text">{{product.description|truncatewords:30}}</p>
+                        <p class="card-text">{{product.description|truncatewords:10}}</p>
                     </div>
                 </div>
             </div>

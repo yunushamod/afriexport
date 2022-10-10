@@ -36,12 +36,6 @@
                     </form>
                     <ul class="navbar-nav">
                         <li class="nav-item text-light">
-                            <a class="nav-link text-light" href="{% url 'cart:cart_detail' %}">Cart
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item text-light">
                             <a class="nav-link text-light" href="{% url 'edit' %}">Edit Profile</a>
                         </li>
                     </ul>
@@ -59,6 +53,20 @@
             </div>
         </nav>
         <div class="container">
+            {% with total_items=cart|length %}
+            <div class="bg-secondary display-6 mb-3 mt-3 p-2 text-{% if total_items > 0 %}end{% else %}start{% endif %}">
+                
+                {% if total_items > 0 %}
+                Your cart:
+                <a href='{% url "cart:cart_detail" %}' style="text-decoration:none;">
+                    {{total_items}} item{{total_items|pluralize}}&nbsp;
+                    {{cart.get_total_price}}
+                </a>
+                {% else %} 
+                Your cart is empty
+                {% endif %}
+            </div>
+            {% endwith %}
             <div class="container">
                 {% block content %}
                 {% endblock %}

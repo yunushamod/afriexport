@@ -23,7 +23,7 @@ def create_product(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def get_my_products(request: HttpRequest, category_slug: str = None) -> HttpResponse:
+def get_my_products(request: HttpRequest, category_slug: str = '') -> HttpResponse:
     category = None
     categories = Category.objects.all()
     products = Product.objects.filter(user=request.user)
@@ -36,10 +36,11 @@ def get_my_products(request: HttpRequest, category_slug: str = None) -> HttpResp
 
 # Create your views here.
 @login_required
-def product_list(request: HttpRequest, category_slug:str=None) -> HttpResponse:
+def product_list(request: HttpRequest, category_slug:str='') -> HttpResponse:
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(available=True).exclude(user=request.user).exclude(quantity=0)
+    products = Product.objects.filter(available=True).exclude(quantity=0)
+    #exclude(user=request.user)
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)

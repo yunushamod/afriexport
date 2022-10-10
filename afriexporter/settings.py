@@ -93,7 +93,7 @@ else:
     DATABASES = {
         'default': {
             'NAME': 'afriexpo_portal',
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'mysql.connector.django',
             'USER': 'afriexpo_portal_admin',
             'PASSWORD': '11Cre$cent1290',
             'OPTIONS': {

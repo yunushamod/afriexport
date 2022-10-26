@@ -1,72 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}
-{% if category %}{{category.name}}{% else %}Products{% endif %}
-{% endblock %}
+{% block title %}All Products{% endblock %} 
 {% block content %}
-<div class="row">
-    <div class="col-md-3">
-        <h1 class="display-4 mt-4 mb-4 text-start">Categories</h1>
-        <nav class="nav flex-column nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link {% if not category %}active{% endif %}" href='{% url "shop:product_list" %}' aria-current="page">All</a>
-            </li>
-            {% for c in categories %}
-            <li class="nav-item">
-                <a class="nav-link {% if category.slug == c.slug %}active{% endif %}" href='{{c.get_absolute_url}}' aria-current="page">{{c.name}}</a>
-            </li>
-            {% endfor %}
-        </nav>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        {% include "shop/product/product_list.html" with products=products %}
+        {% if products %}
+        {% include "shop/product/pagination.html" with page=products %}
+        {% endif %}
     </div>
-    <div class="col-md-7 ms-2">
-        <h1 class="display-4 mt-4 mb-4">
-            {% if category %}{{category.name}}{% else %}Products{% endif %}
-        </h1>
-        <div class="row">
-            {% for product in products %}
-            <div class="col">
-                <div class="card shadow m-1" style="width: 18rem;">
-                    <a href="{{product.get_absolute_url}}">
-                        <!-- style="display: none;" onload="drawCanvas(this)" -->
-                        <!-- <canvas id="canvas_img_{{forloop.counter}}" class="card-img-top"></canvas> -->
-                        <img id="img_{{forloop.counter}}" class="img-thumbnail" style="width: 100%;"
-                        src='{% if product.image %}{{product.image.url}}{% else %}{% static "img/no_image.png" %}{% endif %}'>
-                    </a>
-                    <p class="card-title m-1 fs-5 fw-semibold">{{product.name}}</p>
-                    <p class="card-subtitle m-1 fs-6 text-success fst-italic fw-light">₦{{product.price}}</p>
-                    <div class="card-body">
-                        <p class="card-text">{{product.description|truncatewords:10}}</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-{% endblock %}
-{% block script %}
-<script>
-    // const canvas = document.querySelector('#canvas');
-    // const ctx = canvas.getContext('2d');
-    // const img = new Image();
-    // img.src = `{% if product.image %}{{product.image.url}}{% else %}{% static "img/no_image.png" %}{% endif %}`;
-    // console.log(`{% if product.image %}{{product.image.url}}{% else %}{% static "img/no_image.png" %}{% endif %}`);
-    // img.onload = function(){
-    //     canvas.height = canvas.width * (img.height / img.width)
-    //     const oc = document.createElement('canvas');
-    //     const octx = oc.getContext('2d');
-    //     oc.width = 480;
-    //     oc.height = 334;
-    //     ctx.drawImage(img, 0, 0, oc.width, oc.height, 0, 0, canvas.width, canvas.height);
-    // }
-
-    function drawCanvas(img){
-        const canvas = document.querySelector(`#canvas_${img.id}`);
-        const oc = canvas.getContext('2d');
-        //canvas.height = canvas.width * (img.height / img.width);
-        oc.width = img.width;
-        oc.height = img.height;
-        oc.drawImage(img, 0, 0, oc.width, oc.height, 0, 0, canvas.width, canvas.height);
-    }
-</script>
+</section>
 {% endblock %} 

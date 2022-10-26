@@ -6,6 +6,18 @@
         <h1 class="display-4 text-center m-4">Create an account</h1>
         <form method="post">
             {{user_form.as_p}}
+            <div class="form-group">
+                <label class="form-control-label">Country: </label>
+                <select name="country" id="country" class="form-control mt-2 mb-2" required>
+                    <option value="">Select...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label">State: </label>
+                <select name="state" id="state" class="form-control mt-2 mb-2" required>
+                    <option value="">Select...</option>
+                </select>
+            </div>
             {% csrf_token %}
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-outline-primary">Sign up</button>
@@ -14,4 +26,42 @@
         <p class="mt-3">Do you have an account already? <a href="{% url 'login' %}">log in</a></p>
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    window.onload = function(){
+        loadCountries();
+    }
+    const loadCountries = async () => {
+        let country = document.querySelector('#country');
+        let state = document.querySelector('#state');
+        let response = await fetch(`{% url "state_and_countries" %}`);
+        let res = await response.json();
+        let result = Array.from(res.data);
+        if (result.length != 0) {
+            for (let i = 0; i < result.length; i++) {
+                let option = document.createElement('option');
+                option.value = result[i].name;
+                option.text = result[i].name;
+                country.appendChild(option);
+            }
+        }
+
+        country.addEventListener('change', async (e) => {
+            state.innerHTML = "";
+            let country_name = e.target.value;
+            let country_values = result.find(x => x.name === country_name)
+            console.log(country_values)
+            if (country_values) {
+                for (var i = 0; i < country_values.states.length; i++) {
+                    let option = document.createElement('option');
+                    option.value = country_values.states[i].name;
+                    option.text = country_values.states[i].name
+                    state.appendChild(option);
+                }
+            }
+        })
+    }
+</script>
 {% endblock %}

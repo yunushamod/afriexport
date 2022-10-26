@@ -14,7 +14,7 @@
         <p class="h4 text-success">Price: ₦{{product.price}}</p>
         {% if product.user != request.user %}
         <form action="{% url 'cart:cart_add' product.id %}" method="post">
-            <div style="width: 60%;" class="mt-4 mb-4">
+            <div style="width: 40%;" class="mt-4 mb-4">
                 {{cart_product_form}}
                 {% csrf_token %}
             </div>

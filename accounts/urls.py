@@ -1,5 +1,6 @@
+from unicodedata import name
 from django.urls import path, include
-from .views import register, edit_profile
+from .views import register, edit_profile, get_state_and_countries
 
 urlpatterns = [
     # # login / logout urls
@@ -8,7 +9,8 @@ urlpatterns = [
     # dashboard url
     path('', include('django.contrib.auth.urls')),
     path('register/', register, name='register'),
-    path('edit', edit_profile, name='edit')
+    path('edit', edit_profile, name='edit'),
+    path('states_and_countries', get_state_and_countries, name='state_and_countries'),
     # password change urls
     # path('password_change/', auth_views.PasswordResetView.as_view(), name='password_change'),
     # path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name="password_change_done"),

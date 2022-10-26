@@ -23,13 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&ara=p8_n%jz-xlvbbf8_iz8i#52@vsq9c%d%&e!vv97t_vqpd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = ['portal.afriexporter.com']
 
+COUNTRIES_AND_STATE_API = 'https://countriesnow.space/api/v0.1/countries/states'
 
 # Application definition
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,26 +83,32 @@ WSGI_APPLICATION = 'afriexporter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
-if DEBUG:
-    DATABASES = {
+DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-else:
-    DATABASES = {
-        'default': {
-            'NAME': 'afriexpo_portal',
-            'ENGINE': 'mysql.connector.django',
-            'USER': 'afriexpo_portal_admin',
-            'PASSWORD': '11Cre$cent1290',
-            'OPTIONS': {
-                'autocommit': True,
-            },
-        }
-    }
+
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+# else:
+    # DATABASES = {
+    #     'default': {
+    #         'NAME': 'afriexpo_portal',
+    #         'ENGINE': 'mysql.connector.django',
+    #         'USER': 'afriexpo_portal_admin',
+    #         'PASSWORD': '11Cre$cent1290',
+    #         'OPTIONS': {
+    #             'autocommit': True,
+    #         },
+    #     }
+    # }
 
 
 # Password validation
@@ -139,7 +147,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_SECURE = not DEBUG
 
 
-LOGIN_REDIRECT_URL = 'shop:product_list'
+LOGIN_REDIRECT_URL = 'shop:product_home'
 LOGOUT_URL = 'logout'
 LOGIN_URL = 'login'
 USE_THOUSAND_SEPARATOR = True
@@ -160,12 +168,12 @@ STATIC_ROOT = BASE_DIR / 'static'
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'portal.afriexporter.com'
-    EMAIL_USE_TLS = False
-    EMAIL_PORT = 2096
-    EMAIL_HOST_USER = 'admin@portal.afriexporter.com'
-    EMAIL_HOST_PASSWORD = '11Cre$cent1290'
+    EMAIL_PORT = 465
+    EMAIL_USE_SSL = True
+    EMAIL_HOST_USER = 'adminuser@portal.afriexporter.com'
+    EMAIL_HOST_PASSWORD = 'Gbolahan!4'
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

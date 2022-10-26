@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+{% block title %} Search Results for {{search_keyword}} {% endblock %} 
+{% block content %}
+<h1 class="text-center">Search Results for "{{search_keyword}}"</h1>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        {% include "shop/product/product_list.html" with products=products %}
+        {% if products %}
+        {% include "shop/product/pagination.html" with page=products loop_variable=loop_variable %}
+        {% endif %}
+    </div>
+</section> 
+{% endblock %} 

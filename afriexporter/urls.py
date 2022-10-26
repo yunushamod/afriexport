@@ -25,6 +25,7 @@ urlpatterns = [
     path('shop/', include('shop.urls', namespace='shop')),
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('orders.urls', namespace='orders')),
+    path('chat/', include('chat.urls', namespace='chat')),
     path('', RedirectView.as_view(permanent=False, pattern_name='shop:product_list')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

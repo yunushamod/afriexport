@@ -5,6 +5,7 @@ from .models import Category, Product
 from django.contrib.auth.decorators import login_required
 from cart.forms import CartAddProductForm
 from .forms import CreateProductForm
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -39,11 +40,14 @@ def get_my_products(request: HttpRequest, category_slug: str = '') -> HttpRespon
 def product_list(request: HttpRequest, category_slug:str='') -> HttpResponse:
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(available=True).exclude(quantity=0)
+    product_list = Product.objects.filter(available=True).exclude(quantity=0)
     #exclude(user=request.user)
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
+        product_list = product_list.filter(category=category)
+    paginator = Paginator(product_list, 15)
+    page_number = request.GET.get('page', 1)
+    products = paginator.page(page_number)
     return render(request, 'shop/product/list.html', {
         'category': category, 'categories': categories,
         'products': products
@@ -55,3 +59,28 @@ def product_detail(request: HttpRequest, id: int, slug: str) -> HttpResponse:
     cart_product_form = CartAddProductForm()
     return render(request, 'shop/product/detail.html', {'product': product,
     'cart_product_form':  cart_product_form})
+
+
+def product_home(request: HttpRequest) -> HttpResponse:
+    product_list = Product.objects.filter(available=True).exclude(quantity= 0)
+    paginator = Paginator(product_list, 15)
+    page_number = request.GET.get('page', 1)
+    products = paginator.page(page_number)
+    return render(request, 'shop/product/product_home.html', {
+        'products': products,
+        'loop_variable': range(products.paginator.num_pages)
+    })
+
+def search_product(request: HttpRequest) -> HttpResponse:
+    product_name = request.GET.get("search", "")
+    if not product_name:
+        return redirect('shop:product_list')
+    product_list = Product.objects.filter(name__icontains=product_name).exclude(quantity=0)
+    paginator = Paginator(product_list, 15)
+    page_number = request.GET.get('page', 1)
+    products = paginator.page(page_number)
+    return render(request, 'shop/product/search_result.html', {
+        'products': products,
+        'loop_variable': range(products.paginator.num_pages),
+        'search_keyword': product_name
+    })

@@ -1,0 +1,21 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Shop in style</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Lorem Ipsum dolor met....</p>
+        </div>
+    </div>
+</header>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        {% include "shop/product/product_list.html" with products=products %}
+        {% if products %}
+        {% include "shop/product/pagination.html" with page=products loop_variable=loop_variable %}
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

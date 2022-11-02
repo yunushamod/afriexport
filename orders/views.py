@@ -4,7 +4,7 @@ from orders.models import OrderItem
 from shop.models import Product
 from .forms import OrderCreateForm
 from cart.cart import Cart
-from .tasks import order_created, order_admin_created
+from .tasks import order_created, order_admin_created, order_owner_created
 
 # Create your views here.
 
@@ -27,6 +27,7 @@ def order_create(request: HttpRequest, product_id: int) -> HttpResponse:
             #cart.clear()
             order_created(order.id)
             order_admin_created(order.id)
+            order_owner_created(order.id)
             return render(request, 'orders/order/created.html',
                 {'order':order})
     else:

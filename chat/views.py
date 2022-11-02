@@ -5,6 +5,7 @@ from .forms import MessageForm
 from .models import Messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
+from .tasks import notify_user_of_message
 
 
 # Create your views here.
@@ -17,6 +18,7 @@ def send_message(request: HttpRequest, chat_to: int) -> HttpResponse: #type: ign
         if form.is_valid():
             cd = form.cleaned_data
             Messages.objects.create(user_from=request.user, user_to=user_to, message=cd['message'], read=False)
+            notify_user_of_message(request, user_from_id=request.user.id, user_to_id=chat_to)
             return redirect('cart:cart_detail')
     else:
         form = MessageForm()
@@ -32,6 +34,7 @@ def reply_message(request: HttpRequest, parent_message_id: int, user_to_id: int)
             cd = form.cleaned_data
             Messages.objects.create(user_from=request.user, user_to=user_to, message=cd['message'],read=False,
             parent=parent_message)
+            notify_user_of_message(request, request.user.id, user_to_id)
     return redirect('chat:get_messages')
 
 

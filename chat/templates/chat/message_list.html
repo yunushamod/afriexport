@@ -1,0 +1,47 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %}Messages{% endblock %} 
+{% block content %}
+<h1 class="display-6">Your Inbox</h1>
+<div class="my-3 mx-3">
+    {% for message in message_list %}
+    {% if message.is_parent %}
+    <div class="p-4 {% if message.user_from == request.user %}text-success{% endif %} my-2">
+        <div class="shadow-lg p-4">
+            <img src='{% if message.user_from.profile.photo %}{{message.user_from.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}' class="img-thumbnail"
+                style="width: 40px;height:40px;">
+            {{message.message}}</div>
+        <div class="row my-1">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <ul class="list-group">
+                    {% for reply in message.replies.all %}
+                    <li class="p-3 list-group-item {% if reply.user_from == request.user %}text-success{% endif %}">
+                        <img src='{% if reply.user_from.profile.photo %}{{reply.user_from.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}' class="img-thumbnail"
+                style="width: 40px;height:40px;">
+                        {{reply.message}}
+                    </li>
+                    {% endfor %} 
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% if message.user_from == request.user %}
+    <form action="{% url 'chat:reply' message.id message.user_to.id %}" method="post" class="my-2">
+    {% elif message.user_to == request.user %}
+    <form action="{% url 'chat:reply' message.id message.user_from.id %}" method="post" class="my-2">
+    {% endif %}
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{form.as_p}}
+            </div>
+        </div>
+        <button class="btn btn-outline-primary" type="submit">
+            Reply
+        </button>
+    </form>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

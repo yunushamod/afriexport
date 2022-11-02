@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Cart{% endblock %}
 {% block content %}
-<h1 class="display-4 mt-4 mb-3">Your shopping cart</h1>
+<h1 class="display-6 mt-4 mb-3">Your shopping cart</h1>
 <div class="table-responsive">
     <table class="table table-borderless table-sm table-striped" style="height: 100%;">
         <thead>
@@ -10,7 +10,6 @@
                 <th>Image</th>
                 <th>Product</th>
                 <th>Quantity</th>
-                <th>Remove</th>
                 <th>Unit price</th>
                 <th>Price</th>
             </tr>
@@ -29,27 +28,37 @@
                     {{item.name}}
                 </td>
                 <td>{{item.quantity}}</td>
+                <td class="text-success">{{item.price}}</td>
+                <td class="text-success">{{item.total_price}}</td>
                 <td>
                     <form action='{% url "cart:cart_remove" item.id %}' method="post">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-warning btn-sm">Remove</button>
+                        <button type="submit" class="btn btn-outline-warning btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </form>
                 </td>
-                <td class="text-success">{{item.price}}</td>
-                <td class="text-success">{{item.total_price}}</td>
+                <td>
+                    <a class="btn btn-outline-secondary" href='{% url "chat:send_message" item.creator %}'>
+                        <i class="bi bi-chat-left"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href='{% url "orders:order_create" item.id %}' class="btn btn-outline-primary">Checkout</a>
+                </td>
             </tr> 
             {% endwith %}
             {% endfor %}
             <tr>
-                <td>Total</td>
-                <td colspan="4"></td>
+                <td colspan="5"></td>
+                <td><b>Total:</b></td>
+                <!-- <td colspan="4"></td> -->
                 <td class="text-success">{{cart.get_total_price}}</td>
             </tr>
         </tbody>
     </table>
 </div>
 <p class="text-end">
-    <a href='{% url "shop:product_list" %}' class="btn btn-outline">Continue shopping</a>
-    <a href='{% url "orders:order_create" %}' class="btn btn-outline-primary">Checkout</a>
+    <a href='{% url "shop:product_list" %}' class="btn btn-outline-primary">Continue shopping</a>
 </p>
 {% endblock %} 

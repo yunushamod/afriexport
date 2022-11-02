@@ -60,7 +60,7 @@ def product_detail(request: HttpRequest, id: int, slug: str) -> HttpResponse:
     return render(request, 'shop/product/detail.html', {'product': product,
     'cart_product_form':  cart_product_form})
 
-
+@login_required
 def product_home(request: HttpRequest) -> HttpResponse:
     product_list = Product.objects.filter(available=True).exclude(quantity= 0)
     paginator = Paginator(product_list, 15)

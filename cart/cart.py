@@ -2,7 +2,6 @@ from decimal import Decimal
 from django.conf import settings
 from django.http import HttpRequest
 from shop.models import Product
-from django.forms.models import model_to_dict
 
 class Cart:
     def __init__(self, request: HttpRequest):
@@ -40,6 +39,10 @@ class Cart:
             del self.cart[product_id]
             self.save()
         
+    def get_item(self, id: int):
+        return self.cart[str(id)]
+
+
     def __iter__(self):
         """
         Iterates over the items in the cart and gets the products from the database.
@@ -54,6 +57,7 @@ class Cart:
             cart[str(product.id)]['url'] = product.get_absolute_url()
             cart[str(product.id)]['price'] = str(product.price)
             cart[str(product.id)]['id'] = product.id
+            cart[str(product.id)]['creator'] = product.user.id
         for item in cart.values():
             item['price'] = str(item['price'])
             item['total_price'] = str(Decimal(item['price']) * item['quantity'])

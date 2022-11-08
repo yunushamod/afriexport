@@ -1,24 +1,117 @@
 {% extends "base.html" %} 
+{% load static %}
 {% block title %}Edit Profile {% endblock %}
 {% block content %}
-<div class="container-fluid bg-light p-5 shadow-lg mt-5">
-    <div class="col-md-6">
-        <h1 class="display-4 text-center m-4">Edit your profile</h1>
-        <form method="post" enctype="multipart/form-data">
-            {{user_form.as_p}}
-            {{profile_form.as_p}}
-            {% csrf_token %}
-            <div class="d-grid gap-2">
-                <div  class="row">
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-outline-primary">Edit Profile</button>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="{% url 'password_change' %}" class="btn btn-outline-danger">Change Password</a>
-                    </div>
-                </div>
-            </div>
-        </form>
+
+
+<div class="container-fluid bg-light p-4 mx-2 my-2 shadow-lg">
+    {% if user_form.non_field_errors %}
+    {% for error in user_form.non_field_errors %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span><i class="bi bi-exclamation-triangle"></i></span>
+        {{error}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-</div> 
+    {% endfor %}
+    {% endif %}
+    {% if profile_form.non_field_errors %}
+    {% for error in profile_form.non_field_errors %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span><i class="bi bi-exclamation-triangle"></i></span>
+        {{error}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <h1 class="text-center display-3">Your profile</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class="row my-3 p-5">
+            <a href='{% if request.user.profile.photo %}{{request.user.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}' class="text-center">
+                <img src='{% if request.user.profile.photo %}{{request.user.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}'
+            class="img-rounded" alt="Your profile picture" style="height:200px;width: 200px; border-radius: 50%;">
+            </a>
+        </div>
+        <div class="row my-2 fw-bold d-flex justify-content-center">
+            <div class="col-5">
+                {{profile_form.photo}}
+            </div> 
+        </div>
+        <div class="row my-4 p-3 gy-3 mx-3">
+            <div class="col-md-6 col-sm-12 col-lg-6">
+                <label for="id_first_name">First Name</label>
+                {{user_form.first_name}}
+                {% if user_form.first_name.errors %}
+                {% for error in user_form.first_name.errors %}
+                <p class="text-red fw-bold">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-sm-12 col-lg-6">
+                <label for="id_last_name">Last Name</label>
+                {{user_form.last_name}}
+                {% if user_form.last_name.errors %}
+                {% for error in user_form.last_name.errors %}
+                <p class="text-red fw-bold">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-sm-12 col-lg-6">
+                <label for="id_email">Email Address</label>
+                {{user_form.email}}
+                {% if user_form.email.errors %}
+                {% for error in user_form.email.errors %}
+                <p class="text-red fw-bold">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-sm-12 col-lg-6">
+                <label for="id_phone">Phone</label>
+                {% if profile_form.phone.value %}
+                <input type="tel" name="phone" maxlength="15" required id="id_phone"
+                value="{{profile_form.phone.value}}" />
+                {% else %}
+                <input type="tel" name="phone" maxlength="15" required id="id_phone" />
+                {% endif %}
+                {% if profile_form.phone.errors %}
+                {% for error in profile_form.phone.errors %}
+                <p class="text-red fw-bold">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-sm-12 col-lg-6">
+                <label for="id_company_name">Company name</label>
+                {{profile_form.company_name}}
+                {% if profile_form.company_name.errors %}
+                {% for error in profile_form.company_name.errors %}
+                <p class="text-red fw-bold">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-sm-12 col-lg-6">
+                <label for="id_address">Address</label>
+                {{profile_form.address}}
+                {% if profile_form.address.errors %}
+                {% for error in profile_form.address.errors %}
+                <p class="text-red fw-bold">{{error}}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% csrf_token %}
+        </div>
+        <div class="row p-5">
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary">Save changes</button>
+            </div>
+            <div class="d-grid gap-2 gy-2">
+                <a class="btn btn-outline-danger" href="{% url 'password_change' %}">Change Password</a>
+            </div>
+        </div>
+        <div class="row p-3">
+            
+            <div class="col-6">
+
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}

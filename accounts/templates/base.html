@@ -34,6 +34,22 @@
                                 {% endfor %}
                             </ul>
                         </li>
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-fill"></i> Hi, {{request.user.username}}!
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'edit' %}"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'shop:my_products' %}"><i class="bi bi-shop"></i> My products</a></li>
+                                <li><a class="dropdown-item" href="{% url 'orders:orders' %}"><i class="bi bi-bag-fill"></i> My Orders</a></li>
+                                <li><a class="dropdown-item" href="{% url 'chat:get_messages' %}"><i class="bi bi-envelope"></i> Inbox</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+
+                            </ul>
+                        </li>
+                        {% endif %}
                     </ul>
                     <form class="d-flex mx-2" role="search" action="{% url 'shop:search_product' %}" method="get">
                         <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
@@ -47,23 +63,7 @@
                             <span class="badge bg-dark text-white ms-1 rounded-pill">{{cart|length}}</span>
                         </a>
                     </form>
-                    {% if request.user.is_authenticated %}
-                    <form  class="d-flex mx-2">
-                        <a class="btn btn-outline-dark d-flex" href="{% url 'chat:get_messages' %}">
-                            <i class="bi bi-envelope"></i>
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{messages}}</span>
-                        </a>
-                    </form>
-                    <a class="btn btn-outline-dark d-flex mx-2" href="{% url 'edit' %}">
-                        <i class="bi bi-person-fill"></i> Profile
-                    </a>
-                    <a class="btn btn-outline-dark d-flex mx-2" href="{% url 'shop:my_products' %}">
-                        <i class="bi bi-shop"></i> My Products
-                    </a>
-                    <a class="btn btn-outline-dark d-flex mx-2" href="{% url 'logout' %}">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
-                    {% else %}
+                    {% if not request.user.is_authenticated %}
                     <a class="btn btn-outline-dark d-flex mx-2" href="{% url 'login' %}">
                         <i class="bi bi-box-arrow-left"></i> Login
                     </a>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.template.defaultfilters import slugify
 # Create your models here.
 
 
@@ -42,6 +43,11 @@ class Product(models.Model):
         return reverse('shop:product_detail', args=(self.id,self.slug))
     def __str__(self) -> str:
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
     # def save(self, *args, **kwargs):
     #     if self.image:
     #         imageTemporary = Image.open(self.image)

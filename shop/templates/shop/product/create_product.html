@@ -16,20 +16,3 @@ Create Product
     </div>
 </div> 
 {% endblock %}
-{% block script %}
-<script>
-    let nameField = document.querySelector('#id_name');
-    let slugField = document.querySelector('#id_slug');
-    //slugField.disabled = true;
-    nameField.addEventListener('input', function (e) {
-            let nameContents = e.target.value.split(" ");
-            console.log(nameContents);
-            let string = "";
-            for (let i = 0; i < nameContents.length; i++) {
-                string += nameContents[i].toLowerCase();
-                if(i != (nameContents.length -1)) string += '-';
-            }
-            slugField.value = string.trim("-");
-        });
-</script>
-{% endblock %}

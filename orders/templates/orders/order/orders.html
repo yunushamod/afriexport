@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Your orders {% endblock %}
+{% block content %}
+<h1 class="text-center display-3">
+    Your Orders
+</h1>
+<div class="my-3 mx-2 p-4">
+    {% for order in orders %}
+    {% for order_item in order.items.all %}
+    <div class="card mb-3 shadow-lg">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{% if order_item.product.image %}{{order_item.product.image.url}}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="img-fluid rounded-start" alt="..."
+            style="width: 100px;height: 100px;">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{order_item.product.name|truncatechars:20}}</h5>
+              <p class="card-text">Order number: #{{order_item.id}}</p>
+              <p class="card-text"><small class="text-muted">{{order.created}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    {% endfor %}
+</div>
+{% endblock %}

@@ -5,4 +5,4 @@ from .models import Product
 class CreateProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ('user', 'created', 'updated')
+        exclude = ('user', 'created', 'updated', 'slug')

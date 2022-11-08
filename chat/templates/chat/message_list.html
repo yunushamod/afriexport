@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+.{% extends "base.html" %} 
 {% load static %}
 {% block title %}Messages{% endblock %} 
 {% block content %}
@@ -6,26 +6,39 @@
 <div class="my-3 mx-3">
     {% for message in message_list %}
     {% if message.is_parent %}
-    <div class="p-4 {% if message.user_from == request.user %}text-success{% endif %} my-2">
-        <div class="shadow-lg p-4">
-            <img src='{% if message.user_from.profile.photo %}{{message.user_from.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}' class="img-thumbnail"
-                style="width: 40px;height:40px;">
-            {{message.message}}</div>
-        <div class="row my-1">
-            <div class="col-md-2"></div>
-            <div class="col-md-10">
-                <ul class="list-group">
-                    {% for reply in message.replies.all %}
-                    <li class="p-3 list-group-item {% if reply.user_from == request.user %}text-success{% endif %}">
-                        <img src='{% if reply.user_from.profile.photo %}{{reply.user_from.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}' class="img-thumbnail"
-                style="width: 40px;height:40px;">
-                        {{reply.message}}
-                    </li>
-                    {% endfor %} 
-                </ul>
+    <div class="card mb-3 {% if message.user_from == request.user %}bg-primary{% endif %}" style="max-width:540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src='{% if message.user_from.profile.photo %}{{message.user_from.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}'
+                class="rounded-start" style="width: 100px;height: 100px;">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{message.user_from.username}}</h5>
+                    <p class="card-text">{{message.message}}</p>
+                    <p class="card-text"><small class="text-muted">{{message.created}}</small></p>
+                </div>
             </div>
         </div>
     </div>
+    {% for reply in message.replies.all %}
+    <div class="card mb-3 {% if reply.user_from == request.user %}bg-primary{% endif %}" style="max-width:540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src='{% if reply.user_from.profile.photo %}{{reply.user_from.profile.photo.url}}{% else %}{% static "img/no_image.png" %}{% endif %}'
+                class="rounded-start" style="width: 100px;height: 100px;">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{reply.user_from.username}}</h5>
+                    <p class="card-text">{{reply.message}}</p>
+                    <p class="card-text"><small class="text-muted">{{reply.created}}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
     {% if message.user_from == request.user %}
     <form action="{% url 'chat:reply' message.id message.user_to.id %}" method="post" class="my-2">
     {% elif message.user_to == request.user %}

@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from orders.models import OrderItem
+from orders.models import OrderItem, Order
 from shop.models import Product
 from .forms import OrderCreateForm
 from cart.cart import Cart
@@ -8,6 +8,10 @@ from .tasks import order_created, order_admin_created, order_owner_created
 
 # Create your views here.
 
+
+def get_orders(request: HttpRequest) -> HttpResponse:
+    orders = Order.objects.filter(user=request.user).all()
+    return render(request, 'orders/order/orders.html', {'orders': orders})
 
 def order_create(request: HttpRequest, product_id: int) -> HttpResponse:
     cart = Cart(request)
